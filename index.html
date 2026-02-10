@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SPY BOT</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Splash Screen -->
+    <div id="splashScreen" class="screen active">
+        <img src="assets/IntroScreen.png" alt="SPY BOT" class="splash-image">
+        <button id="btnPlay" class="btn-play">
+            <img src="assets/BtnPlay.png" alt="Play">
+        </button>
+        <div class="version-label">v12</div>
+    </div>
+
+    <!-- Start Screen - Create or Join -->
+    <div id="startScreen" class="screen">
+        <img src="assets/SpyBotBackground.png" class="background-image">
+        <div class="screen-content">
+            <img src="assets/SpyBotLogo.png" alt="SPY BOT Logo" class="logo">
+            <div class="button-stack">
+                <button id="btnJoin" class="btn-image">
+                    <img src="assets/btnJoin.png" alt="Join Game">
+                </button>
+                <button id="btnCreate" class="btn-image">
+                    <img src="assets/btnCreate.png" alt="Create Game">
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Create Game Screen (Host) -->
+    <div id="createScreen" class="screen">
+        <img src="assets/SpyBotBackground.png" class="background-image">
+        <div class="screen-content">
+            <div class="status-message" id="createStatus">Creating game...</div>
+            <div class="game-code-box">
+                <div class="label">GAME CODE:</div>
+                <div class="code-display" id="gameCode">----</div>
+            </div>
+            <div class="players-box">
+                <div class="label">PLAYERS:</div>
+                <div class="players-list" id="playersList">Waiting for players...</div>
+            </div>
+            <button id="btnStartGame" class="btn-image" disabled>
+                <img src="assets/btnStart.png" alt="Start Game">
+            </button>
+        </div>
+    </div>
+
+    <!-- Join Game Screen -->
+    <div id="joinScreen" class="screen">
+        <img src="assets/SpyBotBackground.png" class="background-image">
+        <div class="screen-content">
+            <div class="label">Enter Game Code:</div>
+            <input type="text" id="joinCodeInput" class="code-input" maxlength="4" placeholder="----">
+            <button id="btnJoinConfirm" class="btn-primary">JOIN GAME</button>
+            <div class="status-message" id="joinStatus"></div>
+        </div>
+    </div>
+
+    <!-- Waiting Room (for joined players) -->
+    <div id="waitingScreen" class="screen">
+        <img src="assets/SpyBotBackground.png" class="background-image">
+        <div class="screen-content">
+            <div class="game-code-box">
+                <div class="label">GAME CODE:</div>
+                <div class="code-display" id="waitingCode">----</div>
+            </div>
+            <div class="players-box">
+                <div class="label">PLAYERS:</div>
+                <div class="players-list" id="waitingPlayersList">Loading...</div>
+            </div>
+            <div class="status-message">Waiting for host to start game...</div>
+        </div>
+    </div>
+
+    <!-- Role Reveal - Agent -->
+    <div id="agentScreen" class="screen">
+        <img src="assets/SplashcreenAgentHQ.png" class="background-image">
+        <div class="screen-content role-reveal">
+            <img src="assets/Agent.png" alt="Agent" class="role-image">
+            <h1 class="role-title agent-title">AGENT</h1>
+            <p class="role-description">Complete all GREEN tasks before time runs out!</p>
+            <button id="btnAgentContinue" class="btn-primary">CONTINUE</button>
+        </div>
+    </div>
+
+    <!-- Role Reveal - Cyborg -->
+    <div id="cyborgScreen" class="screen">
+        <img src="assets/SpyBotBackground.png" class="background-image">
+        <div class="screen-content role-reveal">
+            <img src="assets/Cyborg.png" alt="Cyborg" class="role-image">
+            <h1 class="role-title cyborg-title">CYBORG</h1>
+            <p class="role-description">Sabotage by completing RED tasks or let the timer run out!</p>
+            <div class="cyborg-team">
+                <div class="label">Fellow Cyborgs:</div>
+                <div id="cyborgTeamList"></div>
+            </div>
+            <button id="btnCyborgContinue" class="btn-primary">CONTINUE</button>
+        </div>
+    </div>
+
+    <!-- Main Game Screen -->
+    <div id="gameScreen" class="screen">
+        <img src="assets/SpyBotBackground.png" class="background-image">
+        <div class="game-layout">
+            <!-- Left Panel - Tasks -->
+            <div class="tasks-panel">
+                <div class="panel-title">TASKS</div>
+                <div class="tasks-grid">
+                    <!-- Task 1 -->
+                    <button id="btnTask1GRN" class="task-btn task-grn" data-task="1" data-type="GRN">
+                        <img src="assets/1_GRN_OFF.png" alt="Task 1 Green">
+                    </button>
+                    <button id="btnTask1RED" class="task-btn task-red" data-task="1" data-type="RED">
+                        <img src="assets/1_RED_OFF.png" alt="Task 1 Red">
+                    </button>
+                    
+                    <!-- Task 2 -->
+                    <button id="btnTask2GRN" class="task-btn task-grn" data-task="2" data-type="GRN">
+                        <img src="assets/2_GRN_OFF.png" alt="Task 2 Green">
+                    </button>
+                    <button id="btnTask2RED" class="task-btn task-red" data-task="2" data-type="RED">
+                        <img src="assets/2_RED_OFF.png" alt="Task 2 Red">
+                    </button>
+                    
+                    <!-- Task 3 -->
+                    <button id="btnTask3GRN" class="task-btn task-grn" data-task="3" data-type="GRN">
+                        <img src="assets/3_GRN_OFF.png" alt="Task 3 Green">
+                    </button>
+                    <button id="btnTask3RED" class="task-btn task-red" data-task="3" data-type="RED">
+                        <img src="assets/3_RED_OFF.png" alt="Task 3 Red">
+                    </button>
+                    
+                    <!-- Task 4 -->
+                    <button id="btnTask4GRN" class="task-btn task-grn" data-task="4" data-type="GRN">
+                        <img src="assets/4_GRN_OFF.png" alt="Task 4 Green">
+                    </button>
+                    <button id="btnTask4RED" class="task-btn task-red" data-task="4" data-type="RED">
+                        <img src="assets/4_RED_OFF.png" alt="Task 4 Red">
+                    </button>
+                    
+                    <!-- Task 5 -->
+                    <button id="btnTask5GRN" class="task-btn task-grn" data-task="5" data-type="GRN">
+                        <img src="assets/5_GRN_OFF.png" alt="Task 5 Green">
+                    </button>
+                    <button id="btnTask5RED" class="task-btn task-red" data-task="5" data-type="RED">
+                        <img src="assets/5_RED_OFF.png" alt="Task 5 Red">
+                    </button>
+                </div>
+                <button id="btnReset" class="btn-image" style="display: none;">
+                    <img src="assets/btnReset.png" alt="Reset">
+                </button>
+            </div>
+
+            <!-- Right Panel - Info & Actions -->
+            <div class="info-panel">
+                <div class="panel-title">TIMER</div>
+                <div class="timer-display" id="timerDisplay">10:00</div>
+                
+                <div class="spacer"></div>
+                
+                <div class="panel-title">STATUS</div>
+                <div class="status-display" id="statusDisplay">Game in progress...</div>
+                
+                <div class="spacer"></div>
+                
+                <button id="btnCallMeeting" class="btn-image">
+                    <img src="assets/btnTeamMeeting.png" alt="Team Meeting">
+                </button>
+            </div>
+        </div>
+
+        <!-- Bottom Actions -->
+        <div class="bottom-actions">
+            <button id="btnExposed" class="btn-image">
+                <img src="assets/btnExposed.png" alt="Exposed">
+            </button>
+        </div>
+    </div>
+
+    <!-- Team Meeting Screen -->
+    <div id="meetingScreen" class="screen">
+        <img src="assets/SpyBotBackground.png" class="background-image">
+        <div class="screen-content">
+            <h2>TEAM MEETING</h2>
+            <img src="assets/TeamAlert.png" alt="Team Alert" class="alert-image">
+            <p class="meeting-text">Discuss who might be the Cyborg!</p>
+            <div class="players-list" id="meetingPlayersList"></div>
+            <button id="btnEndMeeting" class="btn-primary">END MEETING</button>
+        </div>
+    </div>
+
+    <!-- Exposed Screen -->
+    <div id="exposedScreen" class="screen">
+        <img src="assets/SpyBotBackground.png" class="background-image">
+        <div class="screen-content">
+            <h2>EXPOSE A PLAYER</h2>
+            <p>Select a player to reveal their role:</p>
+            <div class="players-grid" id="exposedPlayersList"></div>
+            <button id="btnCancelExpose" class="btn-secondary">CANCEL</button>
+        </div>
+    </div>
+
+    <!-- Game Over Screen -->
+    <div id="gameOverScreen" class="screen">
+        <img src="assets/SpyBotBackground.png" class="background-image">
+        <div class="screen-content">
+            <h1 id="winnerTitle" class="game-over-title"></h1>
+            <div id="winnerDetails" class="winner-details"></div>
+            <div class="final-players" id="finalPlayers"></div>
+            <button id="btnNewGame" class="btn-primary">NEW GAME</button>
+        </div>
+    </div>
+
+    <!-- Audio Elements -->
+    <audio id="sndClick"><source src="assets/Click.wav"></audio>
+    <audio id="sndBeep"><source src="assets/Beep.mp3"></audio>
+    <audio id="sndExplosion"><source src="assets/Atomic_Bomb-Sound_Explorer-897730679.mp3"></audio>
+    <audio id="sndSiren"><source src="assets/Siren_Noise-KevanGC-1337458893.mp3"></audio>
+    <audio id="sndDestroy"><source src="assets/Iwilldestroyyou.mp3"></audio>
+    <audio id="bgMusic" loop><source src="assets/Darkambientmusic.mp3"></audio>
+
+    <!-- Notification Toast -->
+    <div id="notification" class="notification hidden"></div>
+
+    <!-- PeerJS Library -->
+    <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

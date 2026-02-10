@@ -1,0 +1,596 @@
+/* SPY BOT - Task-Based Game Styles */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Courier New', monospace;
+    background: #000;
+    color: #fff;
+    overflow: hidden;
+    width: 100vw;
+    height: 100vh;
+}
+
+/* Screen Management */
+.screen {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+}
+
+.screen.active {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.background-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -1;
+}
+
+.screen-content {
+    position: relative;
+    z-index: 1;
+    padding: 20px;
+    max-width: 600px;
+    width: 100%;
+    text-align: center;
+}
+
+/* Splash Screen */
+#splashScreen {
+    background: #000;
+}
+
+.splash-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.btn-play {
+    position: absolute;
+    bottom: 30%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.3s;
+    z-index: 2;
+}
+
+.btn-play:hover {
+    transform: translateX(-50%) scale(1.1);
+}
+
+.btn-play img {
+    width: 200px;
+    height: auto;
+}
+
+.version-label {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    color: #444;
+    font-size: 14px;
+    z-index: 2;
+}
+
+/* Logo */
+.logo {
+    width: 250px;
+    margin-bottom: 40px;
+    filter: drop-shadow(0 0 10px rgba(255, 255, 0, 0.5));
+}
+
+/* Buttons */
+.btn-image {
+    background: none;
+    border: none;
+    cursor: pointer;
+    margin: 10px;
+    transition: transform 0.3s, filter 0.3s;
+}
+
+.btn-image:hover:not(:disabled) {
+    transform: scale(1.05);
+    filter: brightness(1.2);
+}
+
+.btn-image:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.btn-image img {
+    max-width: 200px;
+    height: auto;
+    display: block;
+}
+
+.button-stack {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+.btn-primary {
+    padding: 15px 40px;
+    font-size: 18px;
+    font-weight: bold;
+    background: linear-gradient(135deg, #00ff00, #00cc00);
+    color: #000;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.btn-primary:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 20px rgba(0, 255, 0, 0.6);
+}
+
+.btn-secondary {
+    padding: 12px 30px;
+    font-size: 16px;
+    background: #666;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.btn-secondary:hover {
+    background: #888;
+}
+
+/* Game Code Display */
+.game-code-box {
+    background: rgba(0, 0, 0, 0.8);
+    border: 2px solid #0f0;
+    border-radius: 10px;
+    padding: 20px;
+    margin: 20px 0;
+}
+
+.label {
+    font-size: 20px;
+    font-weight: bold;
+    color: #fff;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+}
+
+.code-display {
+    font-size: 36px;
+    font-weight: bold;
+    letter-spacing: 10px;
+    color: #0f0;
+    text-shadow: 0 0 10px #0f0;
+    padding: 10px;
+    background: #000;
+    border-radius: 5px;
+}
+
+.code-input {
+    width: 200px;
+    padding: 15px;
+    font-size: 32px;
+    font-weight: bold;
+    letter-spacing: 8px;
+    text-align: center;
+    background: #000;
+    color: #0f0;
+    border: 2px solid #0f0;
+    border-radius: 8px;
+    text-transform: uppercase;
+    margin: 20px 0;
+}
+
+.code-input:focus {
+    outline: none;
+    box-shadow: 0 0 15px #0f0;
+}
+
+/* Players Box */
+.players-box {
+    background: rgba(0, 0, 0, 0.8);
+    border: 2px solid #fff;
+    border-radius: 10px;
+    padding: 20px;
+    margin: 20px 0;
+}
+
+.players-list {
+    background: #000;
+    color: #ff0;
+    font-size: 18px;
+    padding: 15px;
+    border-radius: 5px;
+    min-height: 60px;
+    font-family: 'Courier New', monospace;
+}
+
+/* Status Messages */
+.status-message {
+    padding: 15px;
+    margin: 15px 0;
+    background: rgba(0, 0, 0, 0.8);
+    border-radius: 8px;
+    font-size: 16px;
+}
+
+.status-message.error {
+    color: #f00;
+    border: 1px solid #f00;
+}
+
+.status-message.success {
+    color: #0f0;
+    border: 1px solid #0f0;
+}
+
+/* Role Reveal */
+.role-reveal {
+    max-width: 500px;
+}
+
+.role-image {
+    width: 250px;
+    margin: 20px auto;
+    display: block;
+    filter: drop-shadow(0 0 20px rgba(0, 255, 255, 0.8));
+}
+
+.role-title {
+    font-size: 48px;
+    font-weight: bold;
+    letter-spacing: 5px;
+    margin: 20px 0;
+    text-transform: uppercase;
+}
+
+.agent-title {
+    color: #0f0;
+    text-shadow: 0 0 20px #0f0;
+}
+
+.cyborg-title {
+    color: #f00;
+    text-shadow: 0 0 20px #f00;
+}
+
+.role-description {
+    font-size: 18px;
+    line-height: 1.6;
+    margin: 20px 0;
+    color: #ff0;
+}
+
+.cyborg-team {
+    background: rgba(255, 0, 0, 0.2);
+    border: 2px solid #f00;
+    border-radius: 10px;
+    padding: 15px;
+    margin: 20px 0;
+}
+
+.cyborg-team .label {
+    color: #f00;
+}
+
+#cyborgTeamList {
+    color: #ff6666;
+    font-size: 18px;
+    margin-top: 10px;
+}
+
+/* Main Game Layout */
+.game-layout {
+    display: flex;
+    gap: 20px;
+    padding: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+    height: calc(100vh - 100px);
+}
+
+/* Tasks Panel */
+.tasks-panel {
+    flex: 1;
+    background: rgba(0, 0, 0, 0.8);
+    border: 2px solid #0ff;
+    border-radius: 10px;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+}
+
+.panel-title {
+    font-size: 20px;
+    font-weight: bold;
+    color: #fff;
+    text-align: center;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.tasks-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    flex: 1;
+}
+
+.task-btn {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    transition: transform 0.2s, filter 0.2s;
+}
+
+.task-btn:hover {
+    transform: scale(1.05);
+    filter: brightness(1.2);
+}
+
+.task-btn:active {
+    transform: scale(0.95);
+}
+
+.task-btn img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* Info Panel */
+.info-panel {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.timer-display {
+    background: #000;
+    color: #ff0;
+    font-size: 32px;
+    font-weight: bold;
+    text-align: center;
+    padding: 15px;
+    border-radius: 8px;
+    border: 2px solid #ff0;
+    font-family: 'Courier New', monospace;
+    letter-spacing: 3px;
+}
+
+.status-display {
+    background: #000;
+    color: #ff0;
+    font-size: 18px;
+    text-align: center;
+    padding: 15px;
+    border-radius: 8px;
+    border: 2px solid #fff;
+    min-height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.spacer {
+    height: 20px;
+}
+
+/* Bottom Actions */
+.bottom-actions {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+}
+
+/* Meeting Screen */
+.alert-image {
+    width: 200px;
+    margin: 20px auto;
+    display: block;
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+
+.meeting-text {
+    font-size: 20px;
+    color: #ff0;
+    margin: 20px 0;
+}
+
+/* Players Grid */
+.players-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 15px;
+    margin: 20px 0;
+}
+
+.player-card {
+    background: rgba(0, 0, 0, 0.8);
+    border: 2px solid #0ff;
+    border-radius: 10px;
+    padding: 15px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.player-card:hover {
+    transform: scale(1.05);
+    border-color: #0f0;
+    box-shadow: 0 0 15px rgba(0, 255, 0, 0.5);
+}
+
+.player-card .name {
+    font-size: 16px;
+    font-weight: bold;
+    color: #fff;
+    margin-bottom: 8px;
+}
+
+.player-card .role {
+    font-size: 14px;
+    color: #ff0;
+}
+
+/* Game Over */
+.game-over-title {
+    font-size: 48px;
+    font-weight: bold;
+    margin: 20px 0;
+    text-transform: uppercase;
+}
+
+.game-over-title.agents {
+    color: #0f0;
+    text-shadow: 0 0 20px #0f0;
+}
+
+.game-over-title.cyborgs {
+    color: #f00;
+    text-shadow: 0 0 20px #f00;
+}
+
+.winner-details {
+    font-size: 20px;
+    color: #ff0;
+    margin: 20px 0;
+}
+
+.final-players {
+    background: rgba(0, 0, 0, 0.8);
+    border: 2px solid #fff;
+    border-radius: 10px;
+    padding: 20px;
+    margin: 20px 0;
+    text-align: left;
+}
+
+.final-players .player-item {
+    padding: 10px;
+    margin: 5px 0;
+    border-left: 4px solid #0ff;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.final-players .player-item.cyborg {
+    border-left-color: #f00;
+}
+
+/* Notifications */
+.notification {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.95);
+    border: 2px solid #0f0;
+    border-radius: 10px;
+    padding: 15px 30px;
+    font-size: 18px;
+    color: #0f0;
+    z-index: 1000;
+    box-shadow: 0 0 20px rgba(0, 255, 0, 0.5);
+    animation: slideDown 0.5s ease;
+}
+
+.notification.hidden {
+    display: none;
+}
+
+.notification.error {
+    border-color: #f00;
+    color: #f00;
+    box-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
+}
+
+@keyframes slideDown {
+    from {
+        transform: translateX(-50%) translateY(-50px);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(-50%) translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .game-layout {
+        flex-direction: column;
+        height: auto;
+        padding: 10px;
+    }
+    
+    .tasks-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+    
+    .logo {
+        width: 180px;
+    }
+    
+    .btn-image img {
+        max-width: 150px;
+    }
+    
+    .role-title {
+        font-size: 36px;
+    }
+}
+
+@media (max-width: 480px) {
+    .code-display {
+        font-size: 28px;
+        letter-spacing: 5px;
+    }
+    
+    .timer-display {
+        font-size: 24px;
+    }
+    
+    .panel-title {
+        font-size: 16px;
+    }
+}
