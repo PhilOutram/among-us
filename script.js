@@ -69,7 +69,8 @@ class SpyBotGame {
         
         // Help button
         document.getElementById('helpButton').addEventListener('click', () => this.showHelp());
-        document.getElementById('closeHelp').addEventListener('click', () => this.closeHelp());
+        document.getElementById('btnCloseHelp').addEventListener('click', () => this.closeHelp());
+        document.getElementById('btnCloseHelpBottom').addEventListener('click', () => this.closeHelp());
         
         // Emergency reset
         document.getElementById('emergencyReset').addEventListener('click', () => this.confirmReset());
@@ -793,13 +794,18 @@ class SpyBotGame {
     // Show help dialog
     showHelp() {
         this.playSound('sndClick');
-        document.getElementById('helpDialog').classList.remove('hidden');
+        this.showScreen('helpScreen');
     }
     
     // Close help dialog
     closeHelp() {
         this.playSound('sndClick');
-        document.getElementById('helpDialog').classList.add('hidden');
+        // Return to the last screen before help was shown
+        if (this.gameState.gamePhase === 'playing') {
+            this.showScreen('gameScreen');
+        } else {
+            this.showScreen('splashScreen');
+        }
     }
     
     // Confirm reset

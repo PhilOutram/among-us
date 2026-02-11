@@ -11,9 +11,7 @@
     <div id="splashScreen" class="screen active">
         <img src="assets/SplashcreenAgentHQ.png" alt="Among Us" class="splash-image">
         <h1 class="game-title-splash">AMONG US</h1>
-        <button id="btnPlay" class="btn-play">
-            <img src="assets/BtnPlay.png" alt="Play">
-        </button>
+        <button id="btnPlay" class="btn-primary btn-play-text">PLAY</button>
         <div class="version-label">v1.0</div>
     </div>
 
@@ -22,13 +20,9 @@
         <img src="assets/SplashcreenAgentHQ.png" class="background-image">
         <div class="screen-content">
             <h1 class="game-title">AMONG US</h1>
-            <div class="button-stack">
-                <button id="btnJoin" class="btn-image">
-                    <img src="assets/btnJoin.png" alt="Join Game">
-                </button>
-                <button id="btnCreate" class="btn-image">
-                    <img src="assets/btnCreate.png" alt="Create Game">
-                </button>
+            <div class="button-group">
+                <button id="btnJoin" class="btn-secondary">JOIN GAME</button>
+                <button id="btnCreate" class="btn-primary">HOST GAME</button>
             </div>
         </div>
     </div>
@@ -46,9 +40,7 @@
                 <div class="label">PLAYERS:</div>
                 <div class="players-list" id="playersList">Waiting for players...</div>
             </div>
-            <button id="btnStartGame" class="btn-image" disabled>
-                <img src="assets/btnStart.png" alt="Start Game">
-            </button>
+            <button id="btnStartGame" class="btn-primary" disabled>START GAME</button>
         </div>
     </div>
 
@@ -170,17 +162,13 @@
                 
                 <div class="spacer"></div>
                 
-                <button id="btnCallMeeting" class="btn-image">
-                    <img src="assets/btnTeamMeeting.png" alt="Team Meeting">
-                </button>
+                <button id="btnCallMeeting" class="btn-action">CALL TEAM MEETING</button>
             </div>
         </div>
 
         <!-- Bottom Actions -->
         <div class="bottom-actions">
-            <button id="btnExposed" class="btn-image">
-                <img src="assets/btnExposed.png" alt="Exposed">
-            </button>
+            <button id="btnExposed" class="btn-danger">EXPOSE PLAYER</button>
         </div>
     </div>
 
@@ -229,18 +217,17 @@
     <!-- Notification Toast -->
     <div id="notification" class="notification hidden"></div>
 
-    <!-- Help Button (top right) -->
-    <button id="helpButton" class="help-button hidden" title="Help & Instructions">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <circle cx="12" cy="12" r="10"/>
-            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
-            <line x1="12" y1="17" x2="12.01" y2="17"/>
-        </svg>
+    <!-- Version Number -->
+    <div class="version-number">v1.0</div>
+    
+    <!-- Help Button (shown on all screens) -->
+    <button id="helpButton" class="help-button" title="Help & Instructions">
+        <span class="help-icon">?</span>
     </button>
-
-    <!-- Emergency Reset Button (top left) -->
+    
+    <!-- Emergency Reset Button (hidden on welcome screen) -->
     <button id="emergencyReset" class="emergency-reset hidden" title="Reset/Quit Game">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/>
             <path d="M21 3v5h-5"/>
             <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/>
@@ -248,34 +235,91 @@
         </svg>
     </button>
 
-    <!-- Help Dialog -->
-    <div id="helpDialog" class="dialog-overlay hidden">
+    <!-- Reconnect Dialog -->
+    <div id="reconnectDialog" class="dialog-overlay hidden">
         <div class="dialog-box">
-            <h2>HOW TO PLAY</h2>
-            <div class="help-content">
+            <h2>Game In Progress</h2>
+            <p id="reconnectMessage" class="dialog-message"></p>
+            <div class="dialog-buttons">
+                <button id="btnReconnectYes" class="btn-primary">YES</button>
+                <button id="btnReconnectNo" class="btn-secondary">NO, START NEW GAME</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Help Screen -->
+    <div id="helpScreen" class="screen">
+        <div class="screen-content help-content">
+            <button id="btnCloseHelp" class="close-help-btn">✕</button>
+            <h1>AMONG US</h1>
+            <h2>How to Play</h2>
+            
+            <div class="help-section">
+                <h3>🎮 About the Game</h3>
+                <p>A task-based social deduction game where <strong>Agents</strong> race to complete tasks while <strong>Cyborgs</strong> try to sabotage them.</p>
+            </div>
+            
+            <div class="help-section">
                 <h3>🎯 Objective</h3>
-                <p><strong>Agents:</strong> Complete all 5 GREEN tasks before time runs out</p>
-                <p><strong>Cyborgs:</strong> Sabotage by completing RED tasks OR let timer hit 0:00</p>
-                
+                <p><strong class="agent-text">Agents:</strong> Complete all 5 GREEN tasks before time runs out</p>
+                <p><strong class="cyborg-text">Cyborgs:</strong> Sabotage by completing RED tasks OR let timer hit 0:00</p>
+            </div>
+            
+            <div class="help-section">
                 <h3>⏱️ The Timer</h3>
                 <p>You have 10 minutes. When it hits 0:00, Cyborgs win!</p>
-                
+            </div>
+            
+            <div class="help-section">
                 <h3>🔧 The Tasks</h3>
-                <p>• 5 tasks with GREEN (Agent) and RED (Cyborg) buttons</p>
-                <p>• Click your colored button to complete/sabotage tasks</p>
-                <p>• Task lights show completion status to all players</p>
-                
+                <ul>
+                    <li>5 tasks with GREEN (Agent) and RED (Cyborg) buttons</li>
+                    <li>Click your colored button to complete/sabotage tasks</li>
+                    <li>Task lights show completion status to all players</li>
+                </ul>
+            </div>
+            
+            <div class="help-section">
                 <h3>🤝 Team Meetings</h3>
                 <p>Call a meeting to discuss and pause the timer</p>
-                
+            </div>
+            
+            <div class="help-section">
                 <h3>🔍 Expose</h3>
                 <p>Reveal a player's role - use wisely!</p>
-                
-                <h3>🏆 Win Conditions</h3>
-                <p><strong>Agents Win:</strong> All 5 GREEN tasks complete OR all Cyborgs exposed</p>
-                <p><strong>Cyborgs Win:</strong> Timer hits 0:00 OR all 5 RED tasks complete</p>
             </div>
-            <button id="closeHelp" class="btn-primary">GOT IT</button>
+            
+            <div class="help-section">
+                <h3>🏆 Win Conditions</h3>
+                <p><strong class="agent-text">Agents Win:</strong> All 5 GREEN tasks complete OR all Cyborgs exposed</p>
+                <p><strong class="cyborg-text">Cyborgs Win:</strong> Timer hits 0:00 OR all 5 RED tasks complete</p>
+            </div>
+            
+            <div class="help-section">
+                <h3>🔧 Troubleshooting</h3>
+                
+                <h4>Can't join game:</h4>
+                <ul>
+                    <li>Check the game code is correct (4 letters)</li>
+                    <li>Make sure host's game is still running</li>
+                    <li>Both devices need internet connection</li>
+                    <li>Try refreshing both devices</li>
+                </ul>
+                
+                <h4>Connection lost:</h4>
+                <ul>
+                    <li>Check internet connection</li>
+                    <li>Refresh the page (game state is saved)</li>
+                </ul>
+                
+                <h4>Game stuck:</h4>
+                <ul>
+                    <li>Click the red reset button (top-right)</li>
+                    <li>This will quit and restart the game</li>
+                </ul>
+            </div>
+            
+            <button id="btnCloseHelpBottom" class="btn-primary" style="margin-top: 20px;">CLOSE</button>
         </div>
     </div>
 
