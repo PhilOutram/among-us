@@ -3,24 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SPY BOT</title>
+    <title>Among Us</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <!-- Splash Screen -->
     <div id="splashScreen" class="screen active">
-        <img src="assets/IntroScreen.png" alt="SPY BOT" class="splash-image">
+        <img src="assets/SplashcreenAgentHQ.png" alt="Among Us" class="splash-image">
+        <h1 class="game-title-splash">AMONG US</h1>
         <button id="btnPlay" class="btn-play">
             <img src="assets/BtnPlay.png" alt="Play">
         </button>
-        <div class="version-label">v12</div>
+        <div class="version-label">v1.0</div>
     </div>
 
     <!-- Start Screen - Create or Join -->
     <div id="startScreen" class="screen">
-        <img src="assets/SpyBotBackground.png" class="background-image">
+        <img src="assets/SplashcreenAgentHQ.png" class="background-image">
         <div class="screen-content">
-            <img src="assets/SpyBotLogo.png" alt="SPY BOT Logo" class="logo">
+            <h1 class="game-title">AMONG US</h1>
             <div class="button-stack">
                 <button id="btnJoin" class="btn-image">
                     <img src="assets/btnJoin.png" alt="Join Game">
@@ -34,7 +35,7 @@
 
     <!-- Create Game Screen (Host) -->
     <div id="createScreen" class="screen">
-        <img src="assets/SpyBotBackground.png" class="background-image">
+        <img src="assets/SplashcreenAgentHQ.png" class="background-image">
         <div class="screen-content">
             <div class="status-message" id="createStatus">Creating game...</div>
             <div class="game-code-box">
@@ -53,7 +54,7 @@
 
     <!-- Join Game Screen -->
     <div id="joinScreen" class="screen">
-        <img src="assets/SpyBotBackground.png" class="background-image">
+        <img src="assets/SplashcreenAgentHQ.png" class="background-image">
         <div class="screen-content">
             <div class="label">Enter Game Code:</div>
             <input type="text" id="joinCodeInput" class="code-input" maxlength="4" placeholder="----">
@@ -64,7 +65,7 @@
 
     <!-- Waiting Room (for joined players) -->
     <div id="waitingScreen" class="screen">
-        <img src="assets/SpyBotBackground.png" class="background-image">
+        <img src="assets/SplashcreenAgentHQ.png" class="background-image">
         <div class="screen-content">
             <div class="game-code-box">
                 <div class="label">GAME CODE:</div>
@@ -91,7 +92,7 @@
 
     <!-- Role Reveal - Cyborg -->
     <div id="cyborgScreen" class="screen">
-        <img src="assets/SpyBotBackground.png" class="background-image">
+        <img src="assets/SplashcreenAgentHQ.png" class="background-image">
         <div class="screen-content role-reveal">
             <img src="assets/Cyborg.png" alt="Cyborg" class="role-image">
             <h1 class="role-title cyborg-title">CYBORG</h1>
@@ -106,7 +107,7 @@
 
     <!-- Main Game Screen -->
     <div id="gameScreen" class="screen">
-        <img src="assets/SpyBotBackground.png" class="background-image">
+        <img src="assets/SplashcreenAgentHQ.png" class="background-image">
         <div class="game-layout">
             <!-- Left Panel - Tasks -->
             <div class="tasks-panel">
@@ -185,7 +186,7 @@
 
     <!-- Team Meeting Screen -->
     <div id="meetingScreen" class="screen">
-        <img src="assets/SpyBotBackground.png" class="background-image">
+        <img src="assets/SplashcreenAgentHQ.png" class="background-image">
         <div class="screen-content">
             <h2>TEAM MEETING</h2>
             <img src="assets/TeamAlert.png" alt="Team Alert" class="alert-image">
@@ -197,7 +198,7 @@
 
     <!-- Exposed Screen -->
     <div id="exposedScreen" class="screen">
-        <img src="assets/SpyBotBackground.png" class="background-image">
+        <img src="assets/SplashcreenAgentHQ.png" class="background-image">
         <div class="screen-content">
             <h2>EXPOSE A PLAYER</h2>
             <p>Select a player to reveal their role:</p>
@@ -208,7 +209,7 @@
 
     <!-- Game Over Screen -->
     <div id="gameOverScreen" class="screen">
-        <img src="assets/SpyBotBackground.png" class="background-image">
+        <img src="assets/SplashcreenAgentHQ.png" class="background-image">
         <div class="screen-content">
             <h1 id="winnerTitle" class="game-over-title"></h1>
             <div id="winnerDetails" class="winner-details"></div>
@@ -228,7 +229,75 @@
     <!-- Notification Toast -->
     <div id="notification" class="notification hidden"></div>
 
-    <!-- PeerJS Library -->
+    <!-- Help Button (top right) -->
+    <button id="helpButton" class="help-button hidden" title="Help & Instructions">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+            <line x1="12" y1="17" x2="12.01" y2="17"/>
+        </svg>
+    </button>
+
+    <!-- Emergency Reset Button (top left) -->
+    <button id="emergencyReset" class="emergency-reset hidden" title="Reset/Quit Game">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/>
+            <path d="M21 3v5h-5"/>
+            <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/>
+            <path d="M3 21v-5h5"/>
+        </svg>
+    </button>
+
+    <!-- Help Dialog -->
+    <div id="helpDialog" class="dialog-overlay hidden">
+        <div class="dialog-box">
+            <h2>HOW TO PLAY</h2>
+            <div class="help-content">
+                <h3>🎯 Objective</h3>
+                <p><strong>Agents:</strong> Complete all 5 GREEN tasks before time runs out</p>
+                <p><strong>Cyborgs:</strong> Sabotage by completing RED tasks OR let timer hit 0:00</p>
+                
+                <h3>⏱️ The Timer</h3>
+                <p>You have 10 minutes. When it hits 0:00, Cyborgs win!</p>
+                
+                <h3>🔧 The Tasks</h3>
+                <p>• 5 tasks with GREEN (Agent) and RED (Cyborg) buttons</p>
+                <p>• Click your colored button to complete/sabotage tasks</p>
+                <p>• Task lights show completion status to all players</p>
+                
+                <h3>🤝 Team Meetings</h3>
+                <p>Call a meeting to discuss and pause the timer</p>
+                
+                <h3>🔍 Expose</h3>
+                <p>Reveal a player's role - use wisely!</p>
+                
+                <h3>🏆 Win Conditions</h3>
+                <p><strong>Agents Win:</strong> All 5 GREEN tasks complete OR all Cyborgs exposed</p>
+                <p><strong>Cyborgs Win:</strong> Timer hits 0:00 OR all 5 RED tasks complete</p>
+            </div>
+            <button id="closeHelp" class="btn-primary">GOT IT</button>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="loading-overlay hidden">
+        <div class="spinner"></div>
+        <p>Connecting...</p>
+    </div>
+
+    <!-- Reconnect Dialog -->
+    <div id="reconnectDialog" class="dialog-overlay hidden">
+        <div class="dialog-box">
+            <h2>Game In Progress</h2>
+            <p id="reconnectMessage" class="dialog-message"></p>
+            <div class="dialog-buttons">
+                <button id="btnReconnectYes" class="btn-primary">YES</button>
+                <button id="btnReconnectNo" class="btn-secondary">NO, START NEW GAME</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Audio Elements -->
     <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
     <script src="script.js"></script>
 </body>

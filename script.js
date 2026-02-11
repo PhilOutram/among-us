@@ -66,12 +66,38 @@ class SpyBotGame {
         
         // Game over
         document.getElementById('btnNewGame').addEventListener('click', () => this.newGame());
+        
+        // Help button
+        document.getElementById('helpButton').addEventListener('click', () => this.showHelp());
+        document.getElementById('closeHelp').addEventListener('click', () => this.closeHelp());
+        
+        // Emergency reset
+        document.getElementById('emergencyReset').addEventListener('click', () => this.confirmReset());
+        
+        // Reconnect dialog
+        document.getElementById('btnReconnectYes').addEventListener('click', () => this.reconnectToGame());
+        document.getElementById('btnReconnectNo').addEventListener('click', () => this.startNewGame());
     }
 
     // Show screen
     showScreen(screenId) {
         document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
         document.getElementById(screenId).classList.add('active');
+        
+        // Show/hide help and reset buttons based on screen
+        const helpButton = document.getElementById('helpButton');
+        const resetButton = document.getElementById('emergencyReset');
+        
+        if (screenId === 'splashScreen' || screenId === 'startScreen') {
+            helpButton.classList.add('hidden');
+            resetButton.classList.add('hidden');
+        } else {
+            helpButton.classList.remove('hidden');
+            resetButton.classList.remove('hidden');
+        }
+        
+        // Save game state
+        this.saveGameState();
     }
 
     // Play sounds
@@ -128,6 +154,8 @@ class SpyBotGame {
         this.gameCode = this.generateGameCode();
         this.playerName = 'Host';  // Default, can be changed later
         
+        this.showLoading(true);
+        
         try {
             // Initialize PeerJS
             this.peer = new Peer(this.gameCode, {
@@ -142,7 +170,9 @@ class SpyBotGame {
             this.peer.on('open', (id) => {
                 console.log('Host peer opened:', id);
                 this.gameState.players = [{ name: this.playerName, id: 'host', role: null }];
+                this.showLoading(false);
                 this.showCreateScreen();
+                this.saveGameState();
             });
 
             this.peer.on('connection', (conn) => {
@@ -151,12 +181,34 @@ class SpyBotGame {
 
             this.peer.on('error', (err) => {
                 console.error('Peer error:', err);
-                this.showNotification('Connection error: ' + err.message, true);
+                this.showLoading(false);
+                
+                let errorMsg = 'Connection error';
+                if (err.type === 'unavailable-id') {
+                    errorMsg = 'Game code already in use. Please try again.';
+                    this.gameCode = this.generateGameCode();
+                    setTimeout(() => this.createGame(), 1000);
+                    return;
+                } else if (err.type === 'network') {
+                    errorMsg = 'Network error. Check your internet connection.';
+                } else if (err.type === 'peer-unavailable') {
+                    errorMsg = 'Could not connect to peer network.';
+                }
+                
+                this.showNotification(errorMsg, true);
+            });
+            
+            this.peer.on('disconnected', () => {
+                console.log('Peer disconnected, attempting reconnect...');
+                if (this.peer && !this.peer.destroyed) {
+                    this.peer.reconnect();
+                }
             });
 
         } catch (error) {
             console.error('Failed to create game:', error);
-            this.showNotification('Failed to create game', true);
+            this.showLoading(false);
+            this.showNotification('Failed to create game. Please try again.', true);
         }
     }
 
@@ -737,11 +789,151 @@ class SpyBotGame {
             }
         }
     }
+    
+    // Show help dialog
+    showHelp() {
+        this.playSound('sndClick');
+        document.getElementById('helpDialog').classList.remove('hidden');
+    }
+    
+    // Close help dialog
+    closeHelp() {
+        this.playSound('sndClick');
+        document.getElementById('helpDialog').classList.add('hidden');
+    }
+    
+    // Confirm reset
+    confirmReset() {
+        if (confirm('Are you sure you want to reset? This will end the current game and return to the start.')) {
+            this.playSound('sndClick');
+            this.emergencyReset();
+        }
+    }
+    
+    // Emergency reset - clear everything and reload
+    emergencyReset() {
+        this.cleanup();
+        localStorage.removeItem('amongUsGameState');
+        location.reload();
+    }
+    
+    // Cleanup connections
+    cleanup() {
+        if (this.timerInterval) {
+            clearInterval(this.timerInterval);
+        }
+        if (this.peer) {
+            this.peer.destroy();
+        }
+        this.connections.forEach(conn => {
+            if (conn) conn.close();
+        });
+        this.connections = [];
+    }
+    
+    // Save game state to localStorage
+    saveGameState() {
+        const state = {
+            gameState: this.gameState,
+            playerName: this.playerName,
+            isHost: this.isHost,
+            gameCode: this.gameCode,
+            timestamp: Date.now()
+        };
+        localStorage.setItem('amongUsGameState', JSON.stringify(state));
+    }
+    
+    // Load saved game state
+    loadSavedGameState() {
+        const saved = localStorage.getItem('amongUsGameState');
+        if (saved) {
+            try {
+                const state = JSON.parse(saved);
+                const timeSince = Date.now() - state.timestamp;
+                
+                // If saved state is less than 10 minutes old and game was in progress
+                if (timeSince < 600000 && state.gameState.gamePhase !== 'lobby') {
+                    this.showReconnectDialog(state);
+                    return true;
+                }
+            } catch (e) {
+                console.error('Failed to load saved state:', e);
+            }
+        }
+        return false;
+    }
+    
+    // Show reconnect dialog
+    showReconnectDialog(state) {
+        const message = `You have a game in progress (${state.gameCode}). Do you want to reconnect?`;
+        document.getElementById('reconnectMessage').textContent = message;
+        document.getElementById('reconnectDialog').classList.remove('hidden');
+        
+        this.savedState = state;
+    }
+    
+    // Reconnect to existing game
+    reconnectToGame() {
+        document.getElementById('reconnectDialog').classList.add('hidden');
+        
+        if (this.savedState) {
+            this.gameState = this.savedState.gameState;
+            this.playerName = this.savedState.playerName;
+            this.isHost = this.savedState.isHost;
+            this.gameCode = this.savedState.gameCode;
+            
+            // Try to reconnect via PeerJS
+            if (this.isHost) {
+                this.createGame();
+            } else {
+                this.joinGame();
+            }
+            
+            this.showNotification('Reconnecting to game...', false);
+        }
+    }
+    
+    // Start new game (from reconnect dialog)
+    startNewGame() {
+        document.getElementById('reconnectDialog').classList.add('hidden');
+        localStorage.removeItem('amongUsGameState');
+        this.showScreen('startScreen');
+    }
+    
+    // Show loading overlay
+    showLoading(show) {
+        const overlay = document.getElementById('loadingOverlay');
+        if (show) {
+            overlay.classList.remove('hidden');
+        } else {
+            overlay.classList.add('hidden');
+        }
+    }
 }
 
 // Initialize game when page loads
 let game;
 window.addEventListener('DOMContentLoaded', () => {
     game = new SpyBotGame();
+    
+    // Check for saved game state
+    const hasSavedState = game.loadSavedGameState();
+    
+    // Start background music on first interaction
+    document.addEventListener('click', () => {
+        const bgMusic = document.getElementById('bgMusic');
+        if (bgMusic && bgMusic.paused) {
+            bgMusic.volume = 0.3;
+            bgMusic.play().catch(e => console.log('Music failed:', e));
+        }
+    }, { once: true });
+    
+    // Prevent accidental navigation away
+    window.addEventListener('beforeunload', (e) => {
+        if (game.gameState.gamePhase === 'playing' || game.gameState.gamePhase === 'meeting') {
+            e.preventDefault();
+            e.returnValue = '';
+        }
+    });
 });
 
