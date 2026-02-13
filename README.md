@@ -5,10 +5,10 @@ A real-time multiplayer web-based task completion game where **Agents** race to 
 ## 🎮 Game Overview
 
 SPY BOT is a **task-based social deduction game** where:
-- **Agents** (good guys) try to complete all 5 GREEN tasks before time runs out
-- **Cyborgs** (spies/bad guys) try to sabotage by completing RED tasks or running down the clock
+- **Agents** (good guys) try to complete all 5 tasks before time runs out
+- **Cyborgs** (spies/bad guys) try to sabotage by uncompleting tasks or running down the clock
 - Players race against a **10-minute countdown timer**
-- The game features **5 different tasks**, each with GREEN and RED variants
+- The game features **5 different tasks**, setup in physical space (e.g. around your home, so Task 1 might be on your kitchen table and be to put 10 mixed playering cards in sequential order)
 
 ## ✨ Key Features
 
@@ -18,70 +18,86 @@ SPY BOT is a **task-based social deduction game** where:
 - **👥 3-20 Players Supported**
 - **⏱️ Countdown Timer** - 10 minutes of tension
 - **🎭 Secret Roles** - Cyborgs know each other, Agents don't
-- **📊 5 Tasks** - Complete (green) or sabotage (red)
-- **🤝 Team Meetings** - Pause and discuss
-- **🔍 Expose Mechanic** - Reveal player roles
-- **🏆 Multiple Win Conditions**
+- **📊 5 Tasks** - All phyysical tasks are uncompleted at the start of the game.  On all players' dashboard, no lights are lit.  When a player completes a task, they click the corresponding green button which becomes lit on all players' devices, with the corresponding red button being unlit.  The red buttons are disabled for agents.
+- **📊 Sabbotage** - If a cyborg uncopmletes a task that was previously completed, they click on the red button for that task.  That task is now 'not completed'.  However, Agents do not find out that a task has been uncompleted until either a meeting is called or another task is completed...at this point, the red button for the uncompleted task is lit and the green button is unlit.  This delay protects the cyborgs' identity.  However, if a player physically sees that a task is uncopmleted, even with the green button lit, they can re-complete the task and click the green button again to over-rule the sabbotage.
+- **🤝 Team Meetings** - Pause and discuss, then vote to expose (eliminate) one player.  All players get to use their device to vote who to expose and eliminate.  When all votes are entered, the exposed player is eliminated from the game.
+- **🔍 Expose Mechanic** - When a player is eliminated, they reveal their role in person before it is revealed on the app
+- **🏆 Multiple Win Conditions** - Agents win if they complete all 5 tasks (all green lights lit and none sabbotaged) and call a team meeting.  They also win if they expose and eliminate all cyborgs.  The cyborgs win if the players don't fix all the tasks in the time allotted.  The cyborgs also win if they manage to expose and eliminate enough agents, so there are as many or more cyborgs as agents left in the game.
 - **🎵 Atmospheric Sound Design** - Original game audio
 
 ## 🚀 How to Play
 
 ### 1. **Setup**
-- **Host**: Opens the game and clicks "CREATE" → Gets a 4-letter code
-- **Players**: Click "JOIN" → Enter the 4-letter code
-- **Host**: When everyone is ready, click "START GAME"
+- setup 5 physical tasks around your house 
 
-### 2. **Role Reveal**
-- Each player sees their secret role on their own device
-- **Agents**: See they are an agent and must complete GREEN tasks
-- **Cyborgs**: See they are a cyborg AND who the other cyborgs are
+- Open the web app
+- Enter your name
+- Click "HOST GAME"
+- Share the 4-digit game code with other players
+- Choose number of traitors (must be less than half the players)
+- Click "START GAME" when everyone has joined
 
-### 3. **Gameplay**
+### 2. **Join a Game**
+- Open the web app
+- Enter your name
+- Click "JOIN GAME"
+- Enter the 4-digit code from the host
+- Wait for the host to start the game
+
+### 3. **Role Reveal**
+- Each player secretly views their role on their own device
+- **Agents**: See they are an agent
+- **Traitors**: See they are a traitor AND who the other traitors are
+
+### 4. **Gameplay**
 
 **The Task System:**
 - 5 tasks displayed on the left side of the screen
 - Each task has a **GREEN button** (Agent action) and **RED button** (Cyborg action)
 - Task states:
   - **Incomplete** - Task not yet done (lights OFF)
-  - **Complete** - GREEN task finished (green light ON)
-  - **Broken** - RED task sabotaged (red light ON)
+  - **Complete** - Task finished (green light ON)
+  - **Broken** - Task sabotaged (red light ON)
 
 **For Agents:**
-- Click GREEN buttons to complete tasks
+- Click GREEN buttons once that numbered task has been physically completed
 - Goal: Complete all 5 tasks before timer runs out
-- Can't click RED buttons
+- Can't click RED buttons which are disabled for agents.
 
 **For Cyborgs:**
-- Click RED buttons to break/sabotage tasks
-- Goal: Break all tasks OR let timer run out
-- Can't click GREEN buttons
+- Click RED buttons once a physical task has been broken/sabotaged
+- Goal: Ensure at least one task remains uncompleted until the timer runs out.
+- Can also click GREEN buttons if a task has been completed (may be as a decoy to throw agents off the scent)
 
 **The Timer:**
 - Starts at 10:00 (10 minutes)
 - Counts down in real-time
 - Creates urgency for Agents
-- Victory for Cyborgs if it hits 0:00
+- Victory for Cyborgs if it hits 0:00 and they are still alive and not all tasks have been completed.
 
 **Team Meetings:**
-- Any player can call a meeting
-- Timer pauses during meeting
+- Any player can call a meeting.  Siren sounds on all devices with message that a meeting is being called.
+- Timer does not pause during meetings, but players have 30 seconds to deliberate
 - Players discuss who they suspect
-- Use to coordinate or accuse
+- Use to coordinate and vote on who to reveal/eject
+- At any point in the 30second they can vote.
 
 **Expose:**
-- Reveals if a player is a Cyborg or Agent
-- Eliminates exposed Cyborgs
+- After 30s (or sooner if all votes are cast), a tally is made of votes.  The player with the most votes is revealed.
+- If two players tie on most votes, a message pops up to say it's a tie and voting needs to be re-done.
+- The exposed player reveals if a Cyborg or Agent
+- That player (hopefully a cyborg!) is then ejected and eliminated
 - Use wisely - could backfire!
 
 ### 4. **Win Conditions**
 
 **Agents Win:**
-- ✅ All 5 GREEN tasks completed
+- ✅ All 5 tasks completed
 - ✅ OR all Cyborgs are exposed
 
 **Cyborgs Win:**
 - ❌ Timer runs out (hits 0:00)
-- ❌ OR all 5 RED tasks completed (all tasks broken)
+- ❌ as many agents are exposed as there are cyborgs left
 
 ## 🎯 Strategy Tips
 
