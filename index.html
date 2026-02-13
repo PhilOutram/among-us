@@ -3,103 +3,124 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Among Us</title>
+    <title>SPY BOT - Among Us</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <!-- Splash Screen -->
-    <div id="splashScreen" class="screen active">
-        <img src="assets/SplashcreenAgentHQ.png" alt="Among Us" class="splash-image">
-        <h1 class="game-title-splash">AMONG US</h1>
-        <button id="btnPlay" class="btn-primary btn-play-text">PLAY</button>
-        <div class="version-label">v1.0</div>
+    <!-- Welcome Screen -->
+    <div id="welcomeScreen" class="screen active">
+        <div class="screen-content">
+            <h1 class="game-title">SPY BOT</h1>
+            <p class="tagline">Complete the mission... or sabotage it</p>
+            <button id="btnPlay" class="btn-primary">PLAY</button>
+        </div>
     </div>
 
-    <!-- Start Screen - Create or Join -->
-    <div id="startScreen" class="screen">
-        <img src="assets/SplashcreenAgentHQ.png" class="background-image">
+    <!-- Name Entry Screen -->
+    <div id="nameScreen" class="screen">
         <div class="screen-content">
-            <h1 class="game-title">AMONG US</h1>
+            <h2>ENTER YOUR NAME</h2>
+            <input type="text" id="playerName" class="text-input" placeholder="Your name" maxlength="20">
             <div class="button-group">
-                <button id="btnJoin" class="btn-secondary">JOIN GAME</button>
-                <button id="btnCreate" class="btn-primary">HOST GAME</button>
+                <button id="btnHostGame" class="btn-primary">HOST GAME</button>
+                <button id="btnJoinGame" class="btn-secondary">JOIN GAME</button>
             </div>
         </div>
     </div>
 
-    <!-- Create Game Screen (Host) -->
-    <div id="createScreen" class="screen">
-        <img src="assets/SplashcreenAgentHQ.png" class="background-image">
+    <!-- Host Setup Screen -->
+    <div id="hostSetupScreen" class="screen">
         <div class="screen-content">
-            <div class="status-message" id="createStatus">Creating game...</div>
-            <div class="game-code-box">
-                <div class="label">GAME CODE:</div>
-                <div class="code-display" id="gameCode">----</div>
+            <h2>HOST GAME SETUP</h2>
+            <div class="game-code-display">
+                <p>Game Code:</p>
+                <div id="gameCodeDisplay" class="game-code">----</div>
+                <p class="help-text">Share this code with other players</p>
             </div>
-            <div class="players-box">
-                <div class="label">PLAYERS:</div>
-                <div class="players-list" id="playersList">Waiting for players...</div>
+
+            <div class="setup-options">
+                <label for="numCyborgs">Number of Cyborgs:</label>
+                <select id="numCyborgs" class="select-input">
+                    <option value="1">1 Cyborg</option>
+                    <option value="2">2 Cyborgs</option>
+                    <option value="3">3 Cyborgs</option>
+                </select>
             </div>
+
+            <div class="players-list">
+                <h3>Players in Lobby:</h3>
+                <div id="lobbyPlayers" class="player-chips"></div>
+            </div>
+
+            <div id="startButtonHelp" class="help-text" style="color: #ff6b6b; margin-bottom: 10px;"></div>
             <button id="btnStartGame" class="btn-primary" disabled>START GAME</button>
+            <button id="btnCancelHost" class="btn-secondary">CANCEL</button>
+
+            <!-- Debug toggle -->
+            <button id="btnDebugToggle" class="debug-toggle-button hidden" title="Toggle Debug Mode">
+                <span class="debug-icon">🐛</span>
+            </button>
         </div>
     </div>
 
     <!-- Join Game Screen -->
-    <div id="joinScreen" class="screen">
-        <img src="assets/SplashcreenAgentHQ.png" class="background-image">
+    <div id="joinGameScreen" class="screen">
         <div class="screen-content">
-            <div class="label">Enter Game Code:</div>
-            <input type="text" id="joinCodeInput" class="code-input" maxlength="4" placeholder="----">
-            <button id="btnJoinConfirm" class="btn-primary">JOIN GAME</button>
-            <div class="status-message" id="joinStatus"></div>
+            <h2>JOIN GAME</h2>
+            <input type="text" id="gameCodeInput" class="text-input game-code-input" placeholder="----" maxlength="4">
+            <p class="help-text" style="margin-top: -10px; margin-bottom: 10px;">Enter 4-letter game code</p>
+            <div id="joinStatus" class="status-message"></div>
+            <div class="button-group">
+                <button id="btnConfirmJoin" class="btn-primary">JOIN</button>
+                <button id="btnCancelJoin" class="btn-secondary">CANCEL</button>
+            </div>
+            <div class="help-text" style="margin-top: 20px;">
+                <p><strong>Troubleshooting:</strong></p>
+                <p style="font-size: 0.85rem; margin-top: 10px;">• Make sure the host has created the game</p>
+                <p style="font-size: 0.85rem;">• Check that the 4-letter code is correct</p>
+                <p style="font-size: 0.85rem;">• Both devices need internet connection</p>
+            </div>
         </div>
     </div>
 
-    <!-- Waiting Room (for joined players) -->
-    <div id="waitingScreen" class="screen">
-        <img src="assets/SplashcreenAgentHQ.png" class="background-image">
+    <!-- Waiting Room Screen (for non-host players) -->
+    <div id="waitingRoomScreen" class="screen">
         <div class="screen-content">
-            <div class="game-code-box">
-                <div class="label">GAME CODE:</div>
-                <div class="code-display" id="waitingCode">----</div>
+            <h2>WAITING FOR HOST</h2>
+            <div class="game-code-display">
+                <p>Game Code:</p>
+                <div id="waitingGameCode" class="game-code">----</div>
             </div>
-            <div class="players-box">
-                <div class="label">PLAYERS:</div>
-                <div class="players-list" id="waitingPlayersList">Loading...</div>
+
+            <div class="players-list">
+                <h3>Players in Lobby:</h3>
+                <div id="waitingPlayers" class="player-chips"></div>
             </div>
-            <div class="status-message">Waiting for host to start game...</div>
+
+            <p class="help-text">Waiting for host to start the game...</p>
+            <button id="btnLeaveGame" class="btn-secondary">LEAVE GAME</button>
         </div>
     </div>
 
-    <!-- Role Reveal - Agent -->
-    <div id="agentScreen" class="screen">
-        <img src="assets/SplashcreenAgentHQ.png" class="background-image">
-        <div class="screen-content role-reveal">
-            <img src="assets/Agent.png" alt="Agent" class="role-image">
-            <h1 class="role-title agent-title">AGENT</h1>
-            <p class="role-description">Complete all GREEN tasks before time runs out!</p>
-            <button id="btnAgentContinue" class="btn-primary">CONTINUE</button>
-        </div>
-    </div>
-
-    <!-- Role Reveal - Cyborg -->
-    <div id="cyborgScreen" class="screen">
-        <img src="assets/SplashcreenAgentHQ.png" class="background-image">
-        <div class="screen-content role-reveal">
-            <img src="assets/Cyborg.png" alt="Cyborg" class="role-image">
-            <h1 class="role-title cyborg-title">CYBORG</h1>
-            <p class="role-description">Sabotage by completing RED tasks or let the timer run out!</p>
-            <div class="cyborg-team">
-                <div class="label">Fellow Cyborgs:</div>
-                <div id="cyborgTeamList"></div>
+    <!-- Role Reveal Screen -->
+    <div id="roleRevealScreen" class="screen">
+        <div class="screen-content">
+            <h2>YOUR ROLE</h2>
+            <div class="role-card" id="roleCard">
+                <img id="roleImage" src="" alt="Role" class="role-image">
+                <h3 id="roleTitle" class="role-title"></h3>
+                <p id="roleDescription" class="role-description"></p>
+                <div id="cyborgListContainer" class="cyborg-list hidden">
+                    <h4>Your Fellow Cyborgs:</h4>
+                    <div id="cyborgList"></div>
+                </div>
             </div>
-            <button id="btnCyborgContinue" class="btn-primary">CONTINUE</button>
+            <button id="btnAcknowledgeRole" class="btn-primary">CONTINUE</button>
         </div>
     </div>
 
     <!-- Main Game Screen -->
     <div id="gameScreen" class="screen">
-        <img src="assets/SplashcreenAgentHQ.png" class="background-image">
         <div class="game-layout">
             <!-- Left Panel - Tasks -->
             <div class="tasks-panel">
@@ -107,103 +128,142 @@
                 <div class="tasks-grid">
                     <!-- Task 1 -->
                     <button id="btnTask1GRN" class="task-btn task-grn" data-task="1" data-type="GRN">
-                        <img src="assets/1_GRN_OFF.png" alt="Task 1 Green">
+                        <span class="task-number">1</span>
                     </button>
                     <button id="btnTask1RED" class="task-btn task-red" data-task="1" data-type="RED">
-                        <img src="assets/1_RED_OFF.png" alt="Task 1 Red">
+                        <span class="task-number">1</span>
                     </button>
-                    
+
                     <!-- Task 2 -->
                     <button id="btnTask2GRN" class="task-btn task-grn" data-task="2" data-type="GRN">
-                        <img src="assets/2_GRN_OFF.png" alt="Task 2 Green">
+                        <span class="task-number">2</span>
                     </button>
                     <button id="btnTask2RED" class="task-btn task-red" data-task="2" data-type="RED">
-                        <img src="assets/2_RED_OFF.png" alt="Task 2 Red">
+                        <span class="task-number">2</span>
                     </button>
-                    
+
                     <!-- Task 3 -->
                     <button id="btnTask3GRN" class="task-btn task-grn" data-task="3" data-type="GRN">
-                        <img src="assets/3_GRN_OFF.png" alt="Task 3 Green">
+                        <span class="task-number">3</span>
                     </button>
                     <button id="btnTask3RED" class="task-btn task-red" data-task="3" data-type="RED">
-                        <img src="assets/3_RED_OFF.png" alt="Task 3 Red">
+                        <span class="task-number">3</span>
                     </button>
-                    
+
                     <!-- Task 4 -->
                     <button id="btnTask4GRN" class="task-btn task-grn" data-task="4" data-type="GRN">
-                        <img src="assets/4_GRN_OFF.png" alt="Task 4 Green">
+                        <span class="task-number">4</span>
                     </button>
                     <button id="btnTask4RED" class="task-btn task-red" data-task="4" data-type="RED">
-                        <img src="assets/4_RED_OFF.png" alt="Task 4 Red">
+                        <span class="task-number">4</span>
                     </button>
-                    
+
                     <!-- Task 5 -->
                     <button id="btnTask5GRN" class="task-btn task-grn" data-task="5" data-type="GRN">
-                        <img src="assets/5_GRN_OFF.png" alt="Task 5 Green">
+                        <span class="task-number">5</span>
                     </button>
                     <button id="btnTask5RED" class="task-btn task-red" data-task="5" data-type="RED">
-                        <img src="assets/5_RED_OFF.png" alt="Task 5 Red">
+                        <span class="task-number">5</span>
                     </button>
                 </div>
-                <button id="btnReset" class="btn-image" style="display: none;">
-                    <img src="assets/btnReset.png" alt="Reset">
-                </button>
             </div>
 
             <!-- Right Panel - Info & Actions -->
             <div class="info-panel">
+                <div class="game-header">
+                    <div class="game-stats">
+                        <span class="stat">Agents: <strong id="agentCount">0</strong></span>
+                        <span class="stat">Cyborgs: <strong id="cyborgCount">0</strong></span>
+                    </div>
+                </div>
+
                 <div class="panel-title">TIMER</div>
                 <div class="timer-display" id="timerDisplay">10:00</div>
-                
-                <div class="spacer"></div>
-                
+
                 <div class="panel-title">STATUS</div>
                 <div class="status-display" id="statusDisplay">Game in progress...</div>
-                
-                <div class="spacer"></div>
-                
-                <button id="btnCallMeeting" class="btn-action">CALL TEAM MEETING</button>
+
+                <div class="game-actions">
+                    <!-- Host-only buttons -->
+                    <div id="hostActions" class="action-section hidden">
+                        <button id="btnCallMeeting" class="btn-action">CALL TEAM MEETING</button>
+                        <button id="btnRecordMurder" class="btn-danger" style="margin-top: 8px;">RECORD MURDER</button>
+                    </div>
+                    <!-- Siren stop button - shown when siren is playing -->
+                    <button id="btnStopSiren" class="btn-secondary hidden" style="margin-top: 8px;">TURN OFF SIREN</button>
+                </div>
             </div>
         </div>
-
-        <!-- Bottom Actions -->
-        <div class="bottom-actions">
-            <button id="btnExposed" class="btn-danger">EXPOSE PLAYER</button>
-        </div>
     </div>
 
-    <!-- Team Meeting Screen -->
-    <div id="meetingScreen" class="screen">
-        <img src="assets/SplashcreenAgentHQ.png" class="background-image">
+    <!-- Deliberation Screen (Team Meeting with Voting) -->
+    <div id="deliberationScreen" class="screen">
         <div class="screen-content">
             <h2>TEAM MEETING</h2>
-            <img src="assets/TeamAlert.png" alt="Team Alert" class="alert-image">
-            <p class="meeting-text">Discuss who might be the Cyborg!</p>
-            <div class="players-list" id="meetingPlayersList"></div>
-            <button id="btnEndMeeting" class="btn-primary">END MEETING</button>
+            <p class="help-text">Vote for a player to eliminate</p>
+
+            <div id="votingPlayers" class="voting-grid"></div>
+
+            <div id="voteStatus" class="vote-status"></div>
+
+            <button id="btnStopSirenMeeting" class="btn-secondary" style="margin-bottom: 10px;">TURN OFF SIREN</button>
+
+            <div id="hostDeliberationActions" class="action-section hidden">
+                <p class="help-text" style="margin-bottom: 15px;">
+                    <strong>Digital Vote:</strong> Wait for all votes, then click "Count Votes"<br>
+                    <strong>Paper Vote:</strong> Select player above, then click "Manual Eliminate"
+                </p>
+                <button id="btnEliminatePlayer" class="btn-danger">COUNT VOTES</button>
+                <button id="btnManualEliminate" class="btn-danger">MANUAL ELIMINATE</button>
+                <button id="btnCancelDeliberation" class="btn-secondary">CANCEL</button>
+            </div>
         </div>
     </div>
 
-    <!-- Exposed Screen -->
-    <div id="exposedScreen" class="screen">
-        <img src="assets/SplashcreenAgentHQ.png" class="background-image">
+    <!-- Record Murder Screen (Host only) -->
+    <div id="murderScreen" class="screen">
         <div class="screen-content">
-            <h2>EXPOSE A PLAYER</h2>
-            <p>Select a player to reveal their role:</p>
-            <div class="players-grid" id="exposedPlayersList"></div>
-            <button id="btnCancelExpose" class="btn-secondary">CANCEL</button>
+            <h2>RECORD MURDER</h2>
+            <p>Select the player who was murdered:</p>
+            <div class="voting-grid" id="murderPlayersList"></div>
+            <button id="btnCancelMurder" class="btn-secondary">CANCEL</button>
+        </div>
+    </div>
+
+    <!-- Elimination Reveal Screen -->
+    <div id="eliminationRevealScreen" class="screen">
+        <div class="screen-content">
+            <h2 id="eliminationRevealTitle">ELIMINATED</h2>
+            <div class="elimination-reveal-card" id="eliminationRevealCard">
+                <div id="eliminationRevealName" class="elimination-reveal-name"></div>
+                <div id="eliminationRevealRole" class="elimination-reveal-role"></div>
+            </div>
+            <button id="btnContinueAfterElimination" class="btn-primary">CONTINUE</button>
         </div>
     </div>
 
     <!-- Game Over Screen -->
     <div id="gameOverScreen" class="screen">
-        <img src="assets/SplashcreenAgentHQ.png" class="background-image">
         <div class="screen-content">
-            <h1 id="winnerTitle" class="game-over-title"></h1>
-            <div id="winnerDetails" class="winner-details"></div>
-            <div class="final-players" id="finalPlayers"></div>
+            <h2 id="winnerTitle" class="winner-title">GAME OVER</h2>
+            <p id="winnerMessage" class="winner-message"></p>
+
+            <div class="final-roles">
+                <h3>Final Roles:</h3>
+                <div id="finalRolesList"></div>
+            </div>
+
             <button id="btnNewGame" class="btn-primary">NEW GAME</button>
         </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="notification" class="notification hidden"></div>
+
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="loading-overlay hidden">
+        <div class="spinner"></div>
+        <p>Connecting...</p>
     </div>
 
     <!-- Audio Elements -->
@@ -212,20 +272,37 @@
     <audio id="sndExplosion"><source src="assets/Atomic_Bomb-Sound_Explorer-897730679.mp3"></audio>
     <audio id="sndSiren"><source src="assets/Siren_Noise-KevanGC-1337458893.mp3"></audio>
     <audio id="sndDestroy"><source src="assets/Iwilldestroyyou.mp3"></audio>
-    <audio id="bgMusic" loop><source src="assets/Darkambientmusic.mp3"></audio>
+    <audio id="bgMusic" loop>
+        <source src="assets/Darkambientmusic.mp3" type="audio/mpeg">
+    </audio>
 
-    <!-- Notification Toast -->
-    <div id="notification" class="notification hidden"></div>
+    <!-- PeerJS Library -->
+    <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
+    <script src="script.js"></script>
 
     <!-- Version Number -->
-    <div class="version-number">v1.0</div>
-    
-    <!-- Help Button (shown on all screens) -->
+    <div class="version-number">v2.1</div>
+
+    <!-- Sound Toggle Button -->
+    <button id="soundToggle" class="sound-toggle-button" title="Toggle Sound">
+        <svg id="soundOnIcon" width="22" height="22" viewBox="0 0 24 24" fill="white" stroke="white" stroke-width="1">
+            <path d="M11 5L6 9H2v6h4l5 4V5z"/>
+            <path d="M19.07 4.93a10 10 0 0 1 0 14.14" fill="none" stroke-width="2"/>
+            <path d="M15.54 8.46a5 5 0 0 1 0 7.07" fill="none" stroke-width="2"/>
+        </svg>
+        <svg id="soundOffIcon" class="hidden" width="22" height="22" viewBox="0 0 24 24" fill="white" stroke="white" stroke-width="1">
+            <path d="M11 5L6 9H2v6h4l5 4V5z"/>
+            <line x1="23" y1="9" x2="17" y2="15" fill="none" stroke-width="2"/>
+            <line x1="17" y1="9" x2="23" y2="15" fill="none" stroke-width="2"/>
+        </svg>
+    </button>
+
+    <!-- Help Button -->
     <button id="helpButton" class="help-button" title="Help & Instructions">
         <span class="help-icon">?</span>
     </button>
-    
-    <!-- Emergency Reset Button (hidden on welcome screen) -->
+
+    <!-- Emergency Reset Button -->
     <button id="emergencyReset" class="emergency-reset hidden" title="Reset/Quit Game">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/>
@@ -246,58 +323,109 @@
             </div>
         </div>
     </div>
-    
+
     <!-- Help Screen -->
     <div id="helpScreen" class="screen">
         <div class="screen-content help-content">
             <button id="btnCloseHelp" class="close-help-btn">✕</button>
-            <h1>AMONG US</h1>
+            <h1>SPY BOT</h1>
             <h2>How to Play</h2>
-            
+
             <div class="help-section">
-                <h3>🎮 About the Game</h3>
-                <p>A task-based social deduction game where <strong>Agents</strong> race to complete tasks while <strong>Cyborgs</strong> try to sabotage them.</p>
-            </div>
-            
-            <div class="help-section">
-                <h3>🎯 Objective</h3>
-                <p><strong class="agent-text">Agents:</strong> Complete all 5 GREEN tasks before time runs out</p>
-                <p><strong class="cyborg-text">Cyborgs:</strong> Sabotage by completing RED tasks OR let timer hit 0:00</p>
-            </div>
-            
-            <div class="help-section">
-                <h3>⏱️ The Timer</h3>
-                <p>You have 10 minutes. When it hits 0:00, Cyborgs win!</p>
-            </div>
-            
-            <div class="help-section">
-                <h3>🔧 The Tasks</h3>
+                <h3>About the Game</h3>
+                <p>A real-time multiplayer task-based social deduction game. Players are secretly assigned as either <strong class="agent-text">Agents</strong> (good) or <strong class="cyborg-text">Cyborgs</strong> (bad).</p>
                 <ul>
-                    <li>5 tasks with GREEN (Agent) and RED (Cyborg) buttons</li>
-                    <li>Click your colored button to complete/sabotage tasks</li>
+                    <li>Agents race to complete all 5 GREEN tasks before time runs out</li>
+                    <li>Cyborgs sabotage by completing RED tasks or running down the clock</li>
+                    <li>10-minute countdown timer creates urgency</li>
+                </ul>
+            </div>
+
+            <div class="help-section">
+                <h3>Getting Started</h3>
+                <h4>Host a Game:</h4>
+                <ol>
+                    <li>Enter your name and click "HOST GAME"</li>
+                    <li>Share the 4-letter game code with other players</li>
+                    <li>Choose number of cyborgs (must be less than half the players)</li>
+                    <li>Click "START GAME" when everyone has joined (need 3+ players)</li>
+                </ol>
+
+                <h4>Join a Game:</h4>
+                <ol>
+                    <li>Enter your name and click "JOIN GAME"</li>
+                    <li>Enter the 4-letter code from the host</li>
+                    <li>Wait for the host to start the game</li>
+                </ol>
+            </div>
+
+            <div class="help-section">
+                <h3>Role Reveal</h3>
+                <p>Each player secretly views their role on their own device:</p>
+                <ul>
+                    <li><strong class="agent-text">Agents:</strong> See they are an agent and must complete GREEN tasks</li>
+                    <li><strong class="cyborg-text">Cyborgs:</strong> See they are a cyborg AND who the other cyborgs are</li>
+                </ul>
+            </div>
+
+            <div class="help-section">
+                <h3>The Tasks</h3>
+                <ul>
+                    <li>5 tasks displayed with GREEN and RED buttons</li>
+                    <li><strong class="agent-text">Agents</strong> click GREEN buttons to complete tasks</li>
+                    <li><strong class="cyborg-text">Cyborgs</strong> click RED buttons to sabotage tasks</li>
+                    <li><strong class="cyborg-text">Cyborgs</strong> can also click GREEN buttons to blend in and trick nearby Agents!</li>
                     <li>Task lights show completion status to all players</li>
                 </ul>
             </div>
-            
+
             <div class="help-section">
-                <h3>🤝 Team Meetings</h3>
-                <p>Call a meeting to discuss and pause the timer</p>
+                <h3>The Timer</h3>
+                <p>10-minute countdown. When it hits 0:00, Cyborgs win! Timer pauses during Team Meetings.</p>
             </div>
-            
+
             <div class="help-section">
-                <h3>🔍 Expose</h3>
-                <p>Reveal a player's role - use wisely!</p>
+                <h3>Team Meetings</h3>
+                <ul>
+                    <li>The host can call a Team Meeting at any time</li>
+                    <li>Timer pauses during the meeting</li>
+                    <li>All players vote for someone to eliminate</li>
+                    <li>The player with the most votes is eliminated and their role revealed</li>
+                    <li>If there's a tie, voting happens again</li>
+                    <li>Host can also manually eliminate via paper voting</li>
+                </ul>
             </div>
-            
+
             <div class="help-section">
-                <h3>🏆 Win Conditions</h3>
-                <p><strong class="agent-text">Agents Win:</strong> All 5 GREEN tasks complete OR all Cyborgs exposed</p>
-                <p><strong class="cyborg-text">Cyborgs Win:</strong> Timer hits 0:00 OR all 5 RED tasks complete</p>
+                <h3>Murders</h3>
+                <ul>
+                    <li>Murders happen in the physical world (real-life game action)</li>
+                    <li>The host records a murder using "RECORD MURDER" button</li>
+                    <li>Murdered players are removed from voting and the game</li>
+                    <li>Their role is revealed when they are recorded as murdered</li>
+                </ul>
             </div>
-            
+
             <div class="help-section">
-                <h3>🔧 Troubleshooting</h3>
-                
+                <h3>Win Conditions</h3>
+                <ul>
+                    <li><strong class="agent-text">Agents Win:</strong> All 5 GREEN tasks completed OR all Cyborgs eliminated</li>
+                    <li><strong class="cyborg-text">Cyborgs Win:</strong> Timer hits 0:00 OR all 5 RED tasks completed</li>
+                </ul>
+            </div>
+
+            <div class="help-section">
+                <h3>Tips</h3>
+                <ul>
+                    <li><strong>For Agents:</strong> Work quickly, watch for suspicious behavior, call meetings if you spot sabotage</li>
+                    <li><strong>For Cyborgs:</strong> Sabotage when no one is watching, blend in, waste time during meetings</li>
+                    <li><strong>Optimal:</strong> 5-10 players, 1 cyborg per 3-4 players</li>
+                </ul>
+            </div>
+
+            <div class="help-section">
+                <h3>Troubleshooting</h3>
+
                 <h4>Can't join game:</h4>
                 <ul>
                     <li>Check the game code is correct (4 letters)</li>
@@ -305,44 +433,22 @@
                     <li>Both devices need internet connection</li>
                     <li>Try refreshing both devices</li>
                 </ul>
-                
+
                 <h4>Connection lost:</h4>
                 <ul>
                     <li>Check internet connection</li>
                     <li>Refresh the page (game state is saved)</li>
                 </ul>
-                
+
                 <h4>Game stuck:</h4>
                 <ul>
                     <li>Click the red reset button (top-right)</li>
                     <li>This will quit and restart the game</li>
                 </ul>
             </div>
-            
+
             <button id="btnCloseHelpBottom" class="btn-primary" style="margin-top: 20px;">CLOSE</button>
         </div>
     </div>
-
-    <!-- Loading Overlay -->
-    <div id="loadingOverlay" class="loading-overlay hidden">
-        <div class="spinner"></div>
-        <p>Connecting...</p>
-    </div>
-
-    <!-- Reconnect Dialog -->
-    <div id="reconnectDialog" class="dialog-overlay hidden">
-        <div class="dialog-box">
-            <h2>Game In Progress</h2>
-            <p id="reconnectMessage" class="dialog-message"></p>
-            <div class="dialog-buttons">
-                <button id="btnReconnectYes" class="btn-primary">YES</button>
-                <button id="btnReconnectNo" class="btn-secondary">NO, START NEW GAME</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Audio Elements -->
-    <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
-    <script src="script.js"></script>
 </body>
 </html>
